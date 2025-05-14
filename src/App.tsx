@@ -12,7 +12,7 @@ export default function App() {
   const [sign_hashedMessage, setSign_hashedMessage] = useState<Hex>("0x");
   const [sign_prefixedHashedMessage, setSign_prefixedHashedMessage] = useState<Hex>("0x");
   const [sign_hashedPrefixedHashedMessage, setSign_hashedPrefixedHashedMessage] = useState<Hex>("0x");
-  const [sign_signature, setSign_signature] = useState<Hex>({});
+  const [sign_signature, setSign_signature] = useState({});
 
   const [verify_signature, setVerify_signature] = useState<Hex>("0xe7ddc834f4ef35aed89d7b2752ee27c5a8708b6a244c03987b1a2157395d396b51186e9e878bf232bf8dbdba64bc59037810cbb2e845cddc800f37a639218fd21b");
   const [verify_message, setVerify_message] = useState<Hex>("0x1111");
@@ -28,6 +28,7 @@ export default function App() {
       const address = privateKeyToAddress(sign_privateKey);
       setSign_address(address);
     } catch (e) {
+      // @ts-ignore
       setSign_address("Invalid private key");
     }
   }, [sign_privateKey]);
@@ -106,32 +107,34 @@ export default function App() {
   };
 
 
+  // @ts-ignore
+  // @ts-ignore
   return (
     <div>
       <div>
         <h2>Sign Message</h2>
 
         <label>Private Key</label><br/>
-        <input value={sign_privateKey} onChange={(e) => setSign_privateKey(e.target.value)}/>
+        <input value={sign_privateKey} onChange={(e) => setSign_privateKey(e.target.value as Hex)}/>
         <br/>
         <label>Address</label><br/> {sign_address}
         <br/>
 
         <label>Message (bytes as hex)</label><br/>
-        <textarea value={sign_message} onChange={(e) => setSign_message(e.target.value)}/>
+        <textarea value={sign_message} onChange={(e) => setSign_message(e.target.value as Hex)}/>
         <br/>
 
         <label>Hashed Message (bytes as hex) </label><br/>
-        <input value={sign_hashedMessage} onChange={(e) => setSign_hashedMessage(e.target.value)}/>
+        <input value={sign_hashedMessage} onChange={(e) => setSign_hashedMessage(e.target.value as Hex)}/>
         <br/>
 
 
         <label>Prefixed Hashed Message (bytes as hex) </label><br/>
-        <input value={sign_prefixedHashedMessage} onChange={(e) => setSign_prefixedHashedMessage(e.target.value)}/>
+        <input value={sign_prefixedHashedMessage} onChange={(e) => setSign_prefixedHashedMessage(e.target.value as Hex)}/>
         <br/>
 
         <label>Hashed Prefixed Hashed Message (bytes as hex) </label><br/>
-        <input value={sign_hashedPrefixedHashedMessage} onChange={(e) => setSign_hashedPrefixedHashedMessage(e.target.value)}/>
+        <input value={sign_hashedPrefixedHashedMessage} onChange={(e) => setSign_hashedPrefixedHashedMessage(e.target.value as Hex)}/>
         <br/>
 
 
@@ -139,7 +142,7 @@ export default function App() {
         <pre>{Object.entries(sign_signature).map(([key, address]) => (
           <div key={key}>
             <strong>{key}:</strong><br/>
-            {address}
+            {address.toString()}
           </div>
         ))}
         </pre>
@@ -151,18 +154,18 @@ export default function App() {
         <h2>Verify Signature</h2>
 
         <label>Message</label><br/>
-        <input value={verify_message} onChange={(e) => setVerify_message(e.target.value)}/>
+        <input value={verify_message} onChange={(e) => setVerify_message(e.target.value as Hex)}/>
         <br/>
 
         <label>Signature</label><br/>
-        <input value={verify_signature} onChange={(e) => setVerify_signature(e.target.value)}/>
+        <input value={verify_signature} onChange={(e) => setVerify_signature(e.target.value as Hex)}/>
         <br/>
 
         <label>Result</label>
         <pre>{Object.entries(verify_result).map(([key, address]) => (
           <div key={key}>
             <strong>{key}:</strong><br/>
-            {address}
+            {address.toString()}
           </div>
         ))}
         </pre>
@@ -183,6 +186,7 @@ async function awaitSafe<T>(promise: Promise<T>): Promise<T | string> {
 }
 
 
+// @ts-ignore
 BigInt.prototype.toJSON = function () {
   return this.toString()
 }
